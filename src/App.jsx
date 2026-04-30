@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { getAllPosts, getPostBySlug } from "./content";
 
-const zaloPrimary = "https://zalo.me/0974996919";
+const zaloPrimary = "https://zalo.me/0888939569";
 const zaloSecondary = "https://zalo.me/0888939569";
 const facebookUrl = "https://www.facebook.com/profile.php?id=61579531209105";
 
@@ -152,11 +152,11 @@ function Header() {
       <div className="topbar">
         <span>Cung cấp thép xây dựng, cắt theo kích thước và gia công tại Bắc Ninh</span>
         <div className="topbar-links">
-          <a href="tel:0974996919">
+          <a className="phone-link" href="tel:0974996919">
             <Phone size={14} />
             0974 996 919
           </a>
-          <a href="tel:0888939569">
+          <a className="phone-link" href="tel:0888939569">
             <Phone size={14} />
             0888 939 569
           </a>
@@ -241,6 +241,16 @@ function Footer() {
   );
 }
 
+function ScrollToTop() {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [location.pathname, location.search]);
+
+  return null;
+}
+
 function HomePage() {
   const navigate = useNavigate();
   const allPosts = useMemo(() => getAllPosts(), []);
@@ -255,7 +265,7 @@ function HomePage() {
     <main>
       <section className="hero">
         <div className="hero-media">
-          <img src="/assets/hero-rebar.jpg" alt="Bãi thép xây dựng và thép cây giao công trình" />
+          <img src="/assets/beam-rebar.jpg" alt="Bãi thép xây dựng và thép cây giao công trình" />
           <div className="hero-overlay" />
         </div>
 
@@ -293,7 +303,7 @@ function HomePage() {
               </strong>
             </div>
             <div className="hero-side-image">
-              <img src="/assets/beam-rebar.jpg" alt="Gia công thép xây dựng theo quy cách" />
+              <img src="/assets/hero-rebar.jpg" alt="Gia công thép xây dựng theo quy cách" />
             </div>
           </motion.div>
         </div>
@@ -466,11 +476,11 @@ function HomePage() {
           </div>
 
           <div className="contact-stack">
-            <a href={zaloPrimary} target="_blank" rel="noreferrer">
+            <a className="phone-link phone-link--card" href="https://zalo.me/0974996919" target="_blank" rel="noreferrer">
               <Phone size={18} />
               Zalo 0974 996 919
             </a>
-            <a href={zaloSecondary} target="_blank" rel="noreferrer">
+            <a className="phone-link phone-link--card" href={zaloSecondary} target="_blank" rel="noreferrer">
               <Phone size={18} />
               Zalo 0888 939 569
             </a>
@@ -637,6 +647,7 @@ function AppShell() {
   return (
     <div className="site-shell" id="top">
       <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
+      <ScrollToTop />
       <Header />
       <Routes>
         <Route path="/" element={<HomePage />} />
