@@ -6,13 +6,11 @@ import {
   ChevronRight,
   CircleCheck,
   Facebook,
-  FileText,
   Gauge,
   Mail,
   MapPin,
   Menu,
   Phone,
-  Ruler,
   Scissors,
   ShieldCheck,
   Truck,
@@ -67,9 +65,9 @@ const serviceCards = [
 const articleTopics = {
   "cat-chuan": {
     eyebrow: "Bài viết về cắt thép",
-    title: "Nhóm nội dung về cắt thép theo kích thước, gia công và hình ảnh thực tế",
+    title: "Cắt thép theo kích thước, gia công và hình ảnh thực tế",
     description:
-      "Khi khách bấm vào Cắt chuẩn, website sẽ ưu tiên hiện bài viết về cắt sắt, hình ảnh gia công, kinh nghiệm đặt theo kích thước và lợi ích giảm hao hụt vật tư.",
+      "Tổng hợp bài viết về cắt sắt, hình ảnh gia công, kinh nghiệm đặt theo kích thước và cách giảm hao hụt vật tư cho công trình.",
     articles: [
       {
         title: "Cắt thép theo kích thước là gì và phù hợp công trình nào?",
@@ -93,9 +91,9 @@ const articleTopics = {
   },
   "thuong-hieu": {
     eyebrow: "Bài viết theo thương hiệu",
-    title: "Nhóm bài viết riêng cho thép Hòa Phát, Kyoei và Việt Đức",
+    title: "Thép Hòa Phát, Kyoei và Việt Đức",
     description:
-      "Khi khách bấm vào 3 thương hiệu, website sẽ đưa họ đến các bài viết riêng cho từng thương hiệu để tăng độ tin cậy và hỗ trợ SEO theo từ khóa thương hiệu.",
+      "Thông tin tham khảo theo từng thương hiệu để khách hàng dễ so sánh quy cách, nhu cầu sử dụng và lựa chọn trước khi chốt đơn.",
     articles: [
       {
         title: "Thép Hòa Phát dùng trong công trình dân dụng và nhà xưởng",
@@ -119,9 +117,9 @@ const articleTopics = {
   },
   "phan-hoi": {
     eyebrow: "Tin tức sắt thép",
-    title: "Nhóm tin tức về sắt thép, giá thép, cắt thép và nhu cầu thị trường",
+    title: "Tin tức sắt thép, giá thép và nhu cầu thị trường",
     description:
-      "Khi khách bấm vào Phản hồi nhanh, website sẽ hiện bài tin tức sắt thép và các nội dung mới để tăng tần suất cập nhật SEO.",
+      "Cập nhật bài viết mới về giá thép, cắt thép, gia công và nhu cầu vật tư để khách tiện theo dõi thị trường.",
     articles: [
       {
         title: "Báo giá thép xây dựng Bắc Ninh hôm nay cần chú ý gì?",
@@ -369,7 +367,7 @@ function App() {
           <div className="section-frame">
             <div className="section-heading section-heading--compact">
               <span className="eyebrow eyebrow--brand">Dịch vụ chính</span>
-              <h2>Thông tin đủ gọn để khách đọc nhanh và bấm báo giá ngay.</h2>
+              <h2>Cung cấp thép, cắt theo kích thước và gia công theo nhu cầu công trình.</h2>
             </div>
 
             <div className="product-grid">
@@ -400,7 +398,7 @@ function App() {
           <div className="section-frame split-grid split-grid--balanced">
             <div className="split-copy">
               <span className="eyebrow eyebrow--soft">Bảng tính trọng lượng thép</span>
-              <h2>Công cụ tính nhanh để khách tham khảo trước khi hỏi báo giá.</h2>
+              <h2>Tính nhanh trọng lượng thép để tham khảo trước khi đặt hàng.</h2>
               <p>
                 Công thức tham khảo: trọng lượng 1 mét thép ≈ D x D / 162. Dùng để ước lượng
                 nhanh khối lượng thép theo đường kính và chiều dài thực tế.
@@ -520,35 +518,6 @@ function App() {
               ))}
             </div>
 
-            <div className="mini-seo-row">
-              <div className="mini-seo-card">
-                <Scissors size={18} />
-                <div>
-                  <strong>Đăng bài, ảnh, tin tức theo nhóm nội dung</strong>
-                  <p>
-                    Website hiện đã có cấu trúc để đăng nhóm bài về cắt thép, thương hiệu và tin tức sắt thép.
-                  </p>
-                </div>
-              </div>
-              <div className="mini-seo-card">
-                <FileText size={18} />
-                <div>
-                  <strong>Tăng SEO bằng landing theo chủ đề</strong>
-                  <p>
-                    Mỗi nhóm có thể tiếp tục mở rộng thành nhiều bài viết mới để kéo truy cập tự nhiên lâu dài.
-                  </p>
-                </div>
-              </div>
-              <div className="mini-seo-card">
-                <Ruler size={18} />
-                <div>
-                  <strong>Hỗ trợ khách đọc nhanh rồi chốt</strong>
-                  <p>
-                    Homepage được rút gọn hơn, còn nội dung chi tiết dồn về đúng nhóm bài viết khách quan tâm.
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
         </section>
 
@@ -556,10 +525,10 @@ function App() {
           <div className="section-frame cta-shell">
             <div>
               <span className="eyebrow eyebrow--soft">Liên hệ báo giá</span>
-              <h2>Báo giá sẽ đi thẳng sang Zalo và Facebook để khách nhắn ngay.</h2>
+              <h2>Liên hệ nhanh qua Zalo, Facebook hoặc điện thoại để nhận báo giá.</h2>
               <p>
-                Tôi đã đổi các nút hành động chính sang Zalo và để Facebook như một kênh liên hệ bổ sung,
-                phù hợp với cách khách vật liệu xây dựng thường làm việc.
+                Hỗ trợ trao đổi nhanh về quy cách thép, chiều dài cắt, số lượng, tiến độ giao hàng
+                và báo giá theo từng thương hiệu.
               </p>
             </div>
 
