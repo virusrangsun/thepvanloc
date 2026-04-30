@@ -1,13 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
   Calculator,
+  ChevronRight,
   CircleCheck,
   Facebook,
   FileText,
   Gauge,
-  Images,
   Mail,
   MapPin,
   Menu,
@@ -19,94 +19,142 @@ import {
   X
 } from "lucide-react";
 
+const zaloPrimary = "https://zalo.me/0974996919";
+const zaloSecondary = "https://zalo.me/0888939569";
+const facebookUrl = "https://www.facebook.com/profile.php?id=61579531209105";
+
 const navItems = [
   { label: "Trang chủ", href: "#top" },
-  { label: "Giới thiệu", href: "#gioi-thieu" },
-  { label: "Sản phẩm", href: "#san-pham" },
+  { label: "Dịch vụ", href: "#dich-vu" },
   { label: "Bảng tính thép", href: "#bang-tinh-thep" },
   { label: "Tin tức", href: "#tin-tuc" },
   { label: "Liên hệ", href: "#lien-he" }
 ];
 
-const strengths = [
+const spotlightCards = [
   {
-    icon: Scissors,
-    title: "Cắt thép theo kích thước",
-    text: "Nhận cắt theo quy cách thực tế của công trình, giảm hao hụt và giúp đội thi công triển khai nhanh hơn."
+    id: "cat-chuan",
+    title: "Cắt chuẩn",
+    subtitle: "Theo kích thước thực tế của công trình"
   },
   {
-    icon: Truck,
-    title: "Gia công và giao hàng theo tiến độ",
-    text: "Hỗ trợ gia công, bó thép, chuẩn bị từng đợt giao để phù hợp lịch đổ móng, lên cột, lên sàn."
+    id: "thuong-hieu",
+    title: "3 thương hiệu",
+    subtitle: "Hòa Phát, Kyoei, Việt Đức"
   },
   {
-    icon: ShieldCheck,
-    title: "Nguồn hàng thương hiệu lớn",
-    text: "Cung cấp thép xây dựng Hòa Phát, Kyoei, Việt Đức với quy cách rõ ràng, dễ kiểm tra và dễ đối chiếu."
+    id: "phan-hoi",
+    title: "Phản hồi nhanh",
+    subtitle: "Chốt báo giá và thông tin trong ngày"
   }
 ];
 
-const productGroups = [
+const serviceCards = [
   {
-    name: "Thép cuộn xây dựng",
-    detail: "Thép cuộn phi 6, phi 8 dùng cho đai, thép sàn, nhà dân dụng và hạng mục gia công phổ biến."
+    title: "Thép cây và thép cuộn xây dựng",
+    text: "Cung cấp thép phi 6 đến phi 32 cho nhà dân, nhà xưởng và công trình cần giao hàng theo tiến độ."
   },
   {
-    name: "Thép cây Hòa Phát",
-    detail: "Các quy cách phi 10, 12, 14, 16, 18, 20, 22, 25, 28, 32 phục vụ nhà ở, nhà xưởng và công trình dân dụng."
+    title: "Cắt theo kích thước và gia công",
+    text: "Nhận cắt thép, bó thép và chuẩn bị vật tư theo danh sách thi công để giảm hao hụt và tiết kiệm thời gian."
   },
   {
-    name: "Thép cây Kyoei, Việt Đức",
-    detail: "Bổ sung lựa chọn theo thương hiệu, yêu cầu hồ sơ vật liệu và thói quen sử dụng của từng đội thầu."
-  },
-  {
-    name: "Dịch vụ cắt và gia công",
-    detail: "Cắt thép theo kích thước, bó thép, chuẩn bị danh mục giao theo từng đợt thi công."
+    title: "Báo giá nhanh theo thương hiệu",
+    text: "Hỗ trợ báo giá thép Hòa Phát, Kyoei, Việt Đức rõ quy cách để khách dễ so sánh và chốt đơn."
   }
 ];
 
-const process = [
-  "Tiếp nhận yêu cầu, bản vẽ hoặc danh sách quy cách thép từ khách hàng.",
-  "Tư vấn chủng loại, thương hiệu, chiều dài cắt và lịch giao phù hợp thực tế công trình.",
-  "Xác nhận đơn hàng, gia công theo kích thước và giao hàng theo từng đợt cần sử dụng.",
-  "Hỗ trợ cập nhật báo giá, khối lượng và thông tin sản phẩm để khách dễ so sánh trước khi chốt."
-];
+const articleTopics = {
+  "cat-chuan": {
+    eyebrow: "Bài viết về cắt thép",
+    title: "Nhóm nội dung về cắt thép theo kích thước, gia công và hình ảnh thực tế",
+    description:
+      "Khi khách bấm vào Cắt chuẩn, website sẽ ưu tiên hiện bài viết về cắt sắt, hình ảnh gia công, kinh nghiệm đặt theo kích thước và lợi ích giảm hao hụt vật tư.",
+    articles: [
+      {
+        title: "Cắt thép theo kích thước là gì và phù hợp công trình nào?",
+        excerpt:
+          "Phân tích khi nào nên đặt thép cây nguyên cây, khi nào nên cắt theo kích thước để giảm hao hụt và tiết kiệm thời gian lắp dựng.",
+        image: "/assets/beam-rebar.jpg"
+      },
+      {
+        title: "Ảnh gia công, bó thép và chuẩn bị từng đợt giao",
+        excerpt:
+          "Tổng hợp hình ảnh thực tế để khách dễ hình dung cách thép được cắt, bó và phân theo từng hạng mục trước khi giao đến công trình.",
+        image: "/assets/hero-rebar.jpg"
+      },
+      {
+        title: "Kinh nghiệm gửi danh sách cắt để nhận báo giá nhanh",
+        excerpt:
+          "Những thông tin nên gửi trước khi đặt cắt thép: đường kính, chiều dài, số lượng, từng đợt giao và thời điểm cần nhận hàng.",
+        image: "/assets/beam-rebar.jpg"
+      }
+    ]
+  },
+  "thuong-hieu": {
+    eyebrow: "Bài viết theo thương hiệu",
+    title: "Nhóm bài viết riêng cho thép Hòa Phát, Kyoei và Việt Đức",
+    description:
+      "Khi khách bấm vào 3 thương hiệu, website sẽ đưa họ đến các bài viết riêng cho từng thương hiệu để tăng độ tin cậy và hỗ trợ SEO theo từ khóa thương hiệu.",
+    articles: [
+      {
+        title: "Thép Hòa Phát dùng trong công trình dân dụng và nhà xưởng",
+        excerpt:
+          "Giới thiệu thép Hòa Phát, nhóm quy cách hay dùng, ưu điểm khi làm nhà dân và cách hỏi báo giá nhanh theo phi thép.",
+        image: "/assets/hero-rebar.jpg"
+      },
+      {
+        title: "Thép Kyoei: lựa chọn quen thuộc của nhiều đội thầu",
+        excerpt:
+          "Bài viết riêng về thép Kyoei, cách nhận biết quy cách, đối chiếu trọng lượng và những hạng mục thường sử dụng.",
+        image: "/assets/beam-rebar.jpg"
+      },
+      {
+        title: "Thép Việt Đức và cách so sánh trước khi chốt đơn hàng",
+        excerpt:
+          "Tổng hợp câu hỏi khách thường quan tâm khi cần so sánh thép Việt Đức với các thương hiệu khác về quy cách và giá bán.",
+        image: "/assets/hero-rebar.jpg"
+      }
+    ]
+  },
+  "phan-hoi": {
+    eyebrow: "Tin tức sắt thép",
+    title: "Nhóm tin tức về sắt thép, giá thép, cắt thép và nhu cầu thị trường",
+    description:
+      "Khi khách bấm vào Phản hồi nhanh, website sẽ hiện bài tin tức sắt thép và các nội dung mới để tăng tần suất cập nhật SEO.",
+    articles: [
+      {
+        title: "Báo giá thép xây dựng Bắc Ninh hôm nay cần chú ý gì?",
+        excerpt:
+          "Tóm tắt các yếu tố ảnh hưởng đến báo giá thực tế: thương hiệu, quy cách, số lượng, lịch giao và yêu cầu cắt theo kích thước.",
+        image: "/assets/beam-rebar.jpg"
+      },
+      {
+        title: "Cách tính nhanh trọng lượng 1 cây thép trước khi đặt hàng",
+        excerpt:
+          "Hướng dẫn công thức tính trọng lượng thép phổ biến để khách có thể tự đối chiếu sơ bộ trước khi chốt số lượng.",
+        image: "/assets/hero-rebar.jpg"
+      },
+      {
+        title: "Tin tức mới về cắt thép, gia công và nhu cầu xây dựng",
+        excerpt:
+          "Gợi ý nhóm bài viết cập nhật thường xuyên để kéo thêm truy cập tự nhiên cho website theo nhu cầu tìm kiếm thực tế.",
+        image: "/assets/beam-rebar.jpg"
+      }
+    ]
+  }
+};
 
 const commonDiameters = [6, 8, 10, 12, 14, 16, 18, 20, 22, 25, 28, 32];
-
-const seoPosts = [
-  {
-    title: "Báo giá thép xây dựng Bắc Ninh hôm nay",
-    excerpt:
-      "Cập nhật cách hỏi báo giá nhanh, cách so sánh giữa thép Hòa Phát, Kyoei, Việt Đức và những yếu tố ảnh hưởng đến giá thực tế.",
-    category: "Báo giá"
-  },
-  {
-    title: "Cách tính trọng lượng 1 cây thép phi 10, 12, 14, 16",
-    excerpt:
-      "Hướng dẫn công thức tính khối lượng thép theo đường kính và chiều dài để dự trù vật tư chính xác hơn cho công trình.",
-    category: "Kiến thức thép"
-  },
-  {
-    title: "Kinh nghiệm đặt thép cắt theo kích thước để giảm hao hụt",
-    excerpt:
-      "Tổng hợp các lưu ý về chiều dài cắt, phân đợt giao và cách đọc bản kê giúp đội thầu tiết kiệm chi phí vật tư.",
-    category: "Kinh nghiệm thi công"
-  }
-];
 
 const faqs = [
   {
     q: "1 cây thép dài bao nhiêu mét?",
-    a: "Chiều dài tham khảo phổ biến là 11,7 mét với thép cây xây dựng. Một số đơn hàng cắt theo kích thước sẽ khác theo yêu cầu."
+    a: "Chiều dài tham khảo phổ biến là 11,7 mét. Với đơn hàng cắt theo kích thước, chiều dài sẽ thay đổi theo nhu cầu công trình."
   },
   {
-    q: "Có nhận cắt thép theo kích thước không?",
-    a: "Có. Vạn Lộc nhận cắt theo kích thước, hỗ trợ bó thép và giao theo từng đợt để phù hợp tiến độ công trình."
-  },
-  {
-    q: "Có cung cấp thép Hòa Phát, Kyoei, Việt Đức không?",
-    a: "Có. Đây là nhóm thương hiệu chủ lực được sử dụng nhiều trong công trình dân dụng và nhà xưởng."
+    q: "Có nhận cắt theo kích thước không?",
+    a: "Có. Vạn Lộc nhận cắt theo kích thước, bó thép và giao theo từng đợt sử dụng."
   }
 ];
 
@@ -120,7 +168,7 @@ const structuredData = {
         "Cung cấp thép xây dựng Bắc Ninh, cắt thép theo kích thước, gia công và báo giá thép Hòa Phát, Kyoei, Việt Đức.",
       areaServed: "Bắc Ninh",
       telephone: ["0974996919", "0888939569"],
-      sameAs: ["https://www.facebook.com/profile.php?id=61579531209105"],
+      sameAs: [facebookUrl],
       url: "https://thepvanloc.bacninh.vn"
     },
     {
@@ -158,6 +206,8 @@ function App() {
   const [scrolled, setScrolled] = useState(false);
   const [diameter, setDiameter] = useState(16);
   const [length, setLength] = useState(11.7);
+  const [activeTopic, setActiveTopic] = useState("cat-chuan");
+  const articleSectionRef = useRef(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -179,10 +229,19 @@ function App() {
 
   const weightPerMeter = useMemo(() => calcWeightPerMeter(diameter), [diameter]);
   const weightPerBar = useMemo(() => weightPerMeter * length, [weightPerMeter, length]);
+  const activeContent = articleTopics[activeTopic];
+
+  const handleTopicClick = (topicId) => {
+    setActiveTopic(topicId);
+    requestAnimationFrame(() => {
+      articleSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  };
 
   return (
     <div className="site-shell" id="top">
       <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
+
       <header className={`site-header ${scrolled ? "site-header--solid" : ""}`}>
         <div className="topbar">
           <span>Cung cấp thép xây dựng, cắt theo kích thước và gia công tại Bắc Ninh</span>
@@ -215,7 +274,7 @@ function App() {
             ))}
           </nav>
 
-          <a className="quote-button desktop-only" href="#lien-he">
+          <a className="quote-button desktop-only" href={zaloPrimary} target="_blank" rel="noreferrer">
             Báo giá ngay
           </a>
 
@@ -236,7 +295,7 @@ function App() {
                 {item.label}
               </a>
             ))}
-            <a className="quote-button" href="#lien-he" onClick={() => setMenuOpen(false)}>
+            <a className="quote-button" href={zaloPrimary} target="_blank" rel="noreferrer" onClick={() => setMenuOpen(false)}>
               Báo giá ngay
             </a>
           </div>
@@ -251,12 +310,7 @@ function App() {
           </div>
 
           <div className="hero-grid">
-            <motion.div
-              className="hero-copy"
-              initial="hidden"
-              animate="show"
-              transition={{ staggerChildren: 0.12 }}
-            >
+            <motion.div className="hero-copy" initial="hidden" animate="show" transition={{ staggerChildren: 0.12 }}>
               <motion.span className="eyebrow" variants={reveal}>
                 Thép xây dựng Bắc Ninh | Cắt theo kích thước | Giao hàng theo tiến độ
               </motion.span>
@@ -266,12 +320,11 @@ function App() {
                 <span>Cung cấp thép Hòa Phát, Kyoei, Việt Đức và gia công theo yêu cầu.</span>
               </motion.h1>
               <motion.p variants={reveal}>
-                Chuyên cung cấp thép xây dựng, thép cây, thép cuộn, dịch vụ cắt thép theo
-                kích thước và gia công cho nhà dân, nhà xưởng và công trình cần giao hàng
-                sát tiến độ. Ưu tiên báo giá nhanh, thông tin rõ và hỗ trợ khách dễ chốt vật tư.
+                Chuyên cung cấp thép xây dựng, thép cây, thép cuộn, dịch vụ cắt thép theo kích
+                thước và gia công cho nhà dân, nhà xưởng và công trình cần giao hàng sát tiến độ.
               </motion.p>
               <motion.div className="hero-actions" variants={reveal}>
-                <a className="quote-button" href="https://zalo.me/0974996919" target="_blank" rel="noreferrer">
+                <a className="quote-button" href={zaloPrimary} target="_blank" rel="noreferrer">
                   Báo giá qua Zalo
                   <ArrowRight size={18} />
                 </a>
@@ -290,8 +343,8 @@ function App() {
               <div className="hero-band">
                 <span>Điểm mạnh công ty</span>
                 <strong>
-                  Cắt theo kích thước, gia công theo đơn, cung cấp thép xây dựng Hòa Phát,
-                  Kyoei, Việt Đức và điều phối giao hàng theo từng đợt thi công.
+                  Cắt theo kích thước, gia công theo đơn, cung cấp thép xây dựng Hòa Phát, Kyoei,
+                  Việt Đức và điều phối giao hàng theo từng đợt thi công.
                 </strong>
               </div>
               <div className="hero-side-image">
@@ -302,72 +355,27 @@ function App() {
         </section>
 
         <section className="metrics-section">
-          <div className="section-frame metrics-grid">
-            <div className="metric-block">
-              <strong>Cắt chuẩn</strong>
-              <span>Theo kích thước thực tế của công trình</span>
-            </div>
-            <div className="metric-block">
-              <strong>3 thương hiệu</strong>
-              <span>Hòa Phát, Kyoei, Việt Đức</span>
-            </div>
-            <div className="metric-block">
-              <strong>Phản hồi nhanh</strong>
-              <span>Chốt báo giá và thông tin trong ngày</span>
-            </div>
+          <div className="section-frame metrics-grid metrics-grid--interactive">
+            {spotlightCards.map((card) => (
+              <button key={card.id} className="metric-block metric-button" type="button" onClick={() => handleTopicClick(card.id)}>
+                <strong>{card.title}</strong>
+                <span>{card.subtitle}</span>
+              </button>
+            ))}
           </div>
         </section>
 
-        <section className="section section-dark" id="gioi-thieu">
+        <section className="section section-dark" id="dich-vu">
           <div className="section-frame">
-            <div className="section-heading">
-              <span className="eyebrow eyebrow--brand">Giới thiệu Vạn Lộc Steel</span>
-              <h2>Nhà cung cấp thép xây dựng tại Bắc Ninh, làm việc theo nhu cầu thực tế của công trình.</h2>
-              <p>
-                Vạn Lộc tập trung vào các việc khách hàng cần ngay: nguồn thép rõ quy cách,
-                hỗ trợ cắt thép theo kích thước, gia công theo danh sách và giao hàng đúng
-                từng đợt sử dụng.
-              </p>
-            </div>
-
-            <div className="capability-list">
-              {strengths.map(({ icon: Icon, title, text }) => (
-                <motion.article
-                  key={title}
-                  className="capability-item"
-                  initial={{ opacity: 0, y: 18 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.35 }}
-                  transition={{ duration: 0.45 }}
-                >
-                  <div className="icon-wrap">
-                    <Icon size={22} />
-                  </div>
-                  <div>
-                    <h3>{title}</h3>
-                    <p>{text}</p>
-                  </div>
-                </motion.article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="section section-light" id="san-pham">
-          <div className="section-frame">
-            <div className="section-heading">
-              <span className="eyebrow eyebrow--soft">Sản phẩm và dịch vụ</span>
-              <h2>Danh mục vật tư và dịch vụ khách thường cần hỏi báo giá trước khi chốt đơn.</h2>
-              <p>
-                Ngoài thép cây, thép cuộn và vật liệu xây dựng, Vạn Lộc còn hỗ trợ gia công,
-                cắt theo kích thước và chuẩn bị vật tư theo danh sách thi công.
-              </p>
+            <div className="section-heading section-heading--compact">
+              <span className="eyebrow eyebrow--brand">Dịch vụ chính</span>
+              <h2>Thông tin đủ gọn để khách đọc nhanh và bấm báo giá ngay.</h2>
             </div>
 
             <div className="product-grid">
-              {productGroups.map((product) => (
+              {serviceCards.map((item) => (
                 <motion.article
-                  key={product.name}
+                  key={item.title}
                   className="product-card"
                   initial={{ opacity: 0, y: 18 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -376,26 +384,26 @@ function App() {
                   transition={{ duration: 0.35 }}
                 >
                   <span className="product-tag">Vạn Lộc Steel</span>
-                  <h3>{product.name}</h3>
-                  <p>{product.detail}</p>
-                  <div className="product-meta">
-                    <span>Xem chi tiết và báo giá</span>
-                    <ArrowRight size={16} />
-                  </div>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                  <a className="product-link" href={zaloPrimary} target="_blank" rel="noreferrer">
+                    Chi tiết báo giá
+                    <ChevronRight size={16} />
+                  </a>
                 </motion.article>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="section section-dark section-split" id="bang-tinh-thep">
-          <div className="section-frame split-grid">
+        <section className="section section-light section-split" id="bang-tinh-thep">
+          <div className="section-frame split-grid split-grid--balanced">
             <div className="split-copy">
-              <span className="eyebrow eyebrow--brand">Bảng tính trọng lượng thép</span>
-              <h2>Công cụ tính nhanh trọng lượng 1 cây thép để khách tham khảo trước khi đặt hàng.</h2>
+              <span className="eyebrow eyebrow--soft">Bảng tính trọng lượng thép</span>
+              <h2>Công cụ tính nhanh để khách tham khảo trước khi hỏi báo giá.</h2>
               <p>
-                Công thức tham khảo: trọng lượng 1 mét thép ≈ D x D / 162. Dùng cho việc dự
-                toán nhanh khối lượng thép cây theo đường kính và chiều dài thực tế.
+                Công thức tham khảo: trọng lượng 1 mét thép ≈ D x D / 162. Dùng để ước lượng
+                nhanh khối lượng thép theo đường kính và chiều dài thực tế.
               </p>
 
               <div className="calculator-panel">
@@ -440,25 +448,13 @@ function App() {
                   </div>
                 </div>
               </div>
-
-              <div className="seo-points">
-                <div>
-                  <Ruler size={18} />
-                  <span>Khách có thể dùng bảng này để ước lượng số kg theo quy cách thép phổ biến.</span>
-                </div>
-                <div>
-                  <FileText size={18} />
-                  <span>Nội dung tính trọng lượng thép cũng là nhóm từ khóa SEO có nhu cầu tìm kiếm cao.</span>
-                </div>
-              </div>
             </div>
 
-            <div className="project-panel">
+            <div className="project-panel project-panel--table">
               <div className="project-panel__head">
                 <CircleCheck size={20} />
                 <span>Bảng tham khảo trọng lượng 1 cây thép xây dựng phổ biến.</span>
               </div>
-
               <div className="table-wrap">
                 <table className="steel-table">
                   <thead>
@@ -482,82 +478,77 @@ function App() {
                   </tbody>
                 </table>
               </div>
-
-              <div className="project-panel__footer">
-                <strong>Lưu ý</strong>
-                <p>
-                  Bảng tính dùng để tham khảo nhanh. Khối lượng thực tế có thể thay đổi theo
-                  nhà sản xuất, tiêu chuẩn sản phẩm và chiều dài cắt theo yêu cầu.
-                </p>
-              </div>
             </div>
           </div>
         </section>
 
-        <section className="section section-light" id="tin-tuc">
+        <section className="section section-dark" id="tin-tuc" ref={articleSectionRef}>
           <div className="section-frame">
-            <div className="section-heading">
-              <span className="eyebrow eyebrow--soft">Tin tức, bài viết, hình ảnh SEO</span>
-              <h2>Cấu trúc nội dung để đẩy SEO cho website thép xây dựng theo nhu cầu tìm kiếm thực tế.</h2>
-              <p>
-                Tôi đã thêm khối tin tức và kiến thức nền để website có thêm nội dung phục vụ SEO:
-                báo giá, kiến thức trọng lượng thép, kinh nghiệm đặt hàng và hình ảnh thực tế.
-              </p>
+            <div className="section-heading section-heading--compact">
+              <span className="eyebrow eyebrow--brand">{activeContent.eyebrow}</span>
+              <h2>{activeContent.title}</h2>
+              <p>{activeContent.description}</p>
+            </div>
+
+            <div className="topic-switcher">
+              {spotlightCards.map((card) => (
+                <button
+                  key={card.id}
+                  type="button"
+                  className={`topic-switcher__button ${activeTopic === card.id ? "is-active" : ""}`}
+                  onClick={() => setActiveTopic(card.id)}
+                >
+                  {card.title}
+                </button>
+              ))}
             </div>
 
             <div className="news-grid">
-              {seoPosts.map((post) => (
+              {activeContent.articles.map((post) => (
                 <article key={post.title} className="news-card">
-                  <span className="news-category">{post.category}</span>
-                  <h3>{post.title}</h3>
-                  <p>{post.excerpt}</p>
+                  <img className="news-card__image" src={post.image} alt={post.title} />
+                  <div className="news-card__body">
+                    <span className="news-category">{activeContent.eyebrow}</span>
+                    <h3>{post.title}</h3>
+                    <p>{post.excerpt}</p>
+                    <a className="product-link" href={zaloPrimary} target="_blank" rel="noreferrer">
+                      Chi tiết báo giá
+                      <ChevronRight size={16} />
+                    </a>
+                  </div>
                 </article>
               ))}
             </div>
 
-            <div className="gallery-strip">
-              <div className="gallery-copy">
-                <Images size={20} />
+            <div className="mini-seo-row">
+              <div className="mini-seo-card">
+                <Scissors size={18} />
                 <div>
-                  <strong>Ảnh công trình, ảnh bãi thép, ảnh gia công</strong>
+                  <strong>Đăng bài, ảnh, tin tức theo nhóm nội dung</strong>
                   <p>
-                    Đây là nhóm nội dung nên bổ sung đều để tăng độ tin cậy và tạo thêm landing
-                    SEO theo từng dự án, từng loại thép, từng khu vực giao hàng.
+                    Website hiện đã có cấu trúc để đăng nhóm bài về cắt thép, thương hiệu và tin tức sắt thép.
                   </p>
                 </div>
               </div>
-              <div className="gallery-images">
-                <img src="/assets/hero-rebar.jpg" alt="Ảnh bãi thép xây dựng Vạn Lộc" />
-                <img src="/assets/beam-rebar.jpg" alt="Ảnh gia công thép theo kích thước" />
+              <div className="mini-seo-card">
+                <FileText size={18} />
+                <div>
+                  <strong>Tăng SEO bằng landing theo chủ đề</strong>
+                  <p>
+                    Mỗi nhóm có thể tiếp tục mở rộng thành nhiều bài viết mới để kéo truy cập tự nhiên lâu dài.
+                  </p>
+                </div>
+              </div>
+              <div className="mini-seo-card">
+                <Ruler size={18} />
+                <div>
+                  <strong>Hỗ trợ khách đọc nhanh rồi chốt</strong>
+                  <p>
+                    Homepage được rút gọn hơn, còn nội dung chi tiết dồn về đúng nhóm bài viết khách quan tâm.
+                  </p>
+                </div>
               </div>
             </div>
-
-            <div className="faq-grid">
-              {faqs.map((item) => (
-                <article key={item.q} className="faq-card">
-                  <h3>{item.q}</h3>
-                  <p>{item.a}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="section section-dark" id="quy-trinh">
-          <div className="section-frame">
-            <div className="section-heading">
-              <span className="eyebrow eyebrow--brand">Quy trình làm việc</span>
-              <h2>Từ báo giá, cắt thép theo kích thước đến giao hàng theo tiến độ công trình.</h2>
-            </div>
-
-            <ol className="process-list">
-              {process.map((step) => (
-                <li key={step}>
-                  <span />
-                  <p>{step}</p>
-                </li>
-              ))}
-            </ol>
           </div>
         </section>
 
@@ -565,27 +556,23 @@ function App() {
           <div className="section-frame cta-shell">
             <div>
               <span className="eyebrow eyebrow--soft">Liên hệ báo giá</span>
-              <h2>Báo giá sẽ liên kết trực tiếp tới Zalo và Facebook để khách nhắn ngay.</h2>
+              <h2>Báo giá sẽ đi thẳng sang Zalo và Facebook để khách nhắn ngay.</h2>
               <p>
-                Tôi đã ưu tiên các điểm chuyển đổi dễ dùng nhất: gọi điện, Zalo và Facebook.
-                Đây là cách phù hợp hơn cho nhóm khách mua thép và vật liệu xây dựng.
+                Tôi đã đổi các nút hành động chính sang Zalo và để Facebook như một kênh liên hệ bổ sung,
+                phù hợp với cách khách vật liệu xây dựng thường làm việc.
               </p>
             </div>
 
             <div className="contact-stack">
-              <a href="https://zalo.me/0974996919" target="_blank" rel="noreferrer">
+              <a href={zaloPrimary} target="_blank" rel="noreferrer">
                 <Phone size={18} />
                 Zalo 0974 996 919
               </a>
-              <a href="https://zalo.me/0888939569" target="_blank" rel="noreferrer">
+              <a href={zaloSecondary} target="_blank" rel="noreferrer">
                 <Phone size={18} />
                 Zalo 0888 939 569
               </a>
-              <a
-                href="https://www.facebook.com/profile.php?id=61579531209105"
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a href={facebookUrl} target="_blank" rel="noreferrer">
                 <Facebook size={18} />
                 Facebook Vạn Lộc Steel
               </a>
