@@ -157,6 +157,7 @@ h3 {
 }
 
 .desktop-nav a:hover,
+.desktop-nav a.active,
 .mobile-panel a:hover {
   color: var(--accent);
 }
@@ -343,6 +344,10 @@ h1 span {
   gap: 14px;
   margin-top: 28px;
   flex-wrap: wrap;
+}
+
+.section-actions {
+  margin-top: 24px;
 }
 
 .hero-side {
@@ -736,6 +741,20 @@ h2 {
   gap: 16px;
 }
 
+.news-meta,
+.article-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.news-meta span,
+.article-meta span {
+  color: var(--muted);
+}
+
 .news-card,
 .faq-card {
   border-radius: 8px;
@@ -757,6 +776,66 @@ h2 {
 
 .news-card__body {
   padding: 22px;
+}
+
+.subpage-shell {
+  min-height: 60vh;
+}
+
+.subpage-title {
+  margin: 0;
+  font-size: clamp(2.2rem, 6vw, 4.8rem);
+  line-height: 0.98;
+  color: var(--brand-strong);
+}
+
+.article-shell {
+  padding-bottom: 44px;
+}
+
+.article-frame {
+  max-width: 920px;
+}
+
+.article-header {
+  margin-bottom: 24px;
+}
+
+.article-cover {
+  width: 100%;
+  border-radius: 10px;
+  max-height: 520px;
+  object-fit: cover;
+}
+
+.article-content {
+  margin-top: 28px;
+  color: var(--text);
+  line-height: 1.8;
+}
+
+.article-content h2,
+.article-content h3 {
+  margin-top: 32px;
+  margin-bottom: 12px;
+  font-size: 2rem;
+}
+
+.article-content p,
+.article-content li {
+  color: var(--text);
+  font-size: 1.02rem;
+}
+
+.article-content ul {
+  padding-left: 20px;
+}
+
+.article-content code {
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(15, 93, 63, 0.08);
+  color: var(--brand-strong);
 }
 
 .topic-switcher {
@@ -1016,5 +1095,11 @@ h2 {
     flex-direction: column;
     align-items: flex-start;
     padding: 20px 0;
+  }
+
+  .news-meta,
+  .article-meta {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }

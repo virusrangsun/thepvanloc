@@ -1,0 +1,46 @@
+backend:
+  name: github
+  repo: virusrangsun/thepvanloc
+  branch: main
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+site_url: "https://thepvanloc.bacninh.vn"
+logo_url: "/assets/vl-logo.svg"
+
+collections:
+  - name: "posts"
+    label: "Bài viết"
+    label_singular: "Bài viết"
+    folder: "src/content/posts"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    preview_path: "tin-tuc/{{slug}}"
+    sortable_fields: ["date", "title", "category"]
+    fields:
+      - { label: "Tiêu đề", name: "title", widget: "string" }
+      - { label: "Slug", name: "slug", widget: "string", hint: "vd: bao-gia-thep-bac-ninh" }
+      - { label: "Ngày đăng", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
+      - {
+          label: "Chuyên mục",
+          name: "category",
+          widget: "string",
+          hint: "vd: Báo giá thép, Thép Hòa Phát, Cắt thép"
+        }
+      - {
+          label: "Nhóm nội dung",
+          name: "topic",
+          widget: "select",
+          options:
+            [
+              { label: "Cắt chuẩn", value: "cat-chuan" },
+              { label: "3 thương hiệu", value: "thuong-hieu" },
+              { label: "Phản hồi nhanh", value: "phan-hoi" }
+            ]
+        }
+      - { label: "Bài nổi bật", name: "featured", widget: "boolean", required: false, default: false }
+      - { label: "Ảnh đại diện", name: "cover", widget: "image" }
+      - { label: "Mô tả ngắn", name: "excerpt", widget: "text" }
+      - { label: "Nội dung", name: "body", widget: "markdown" }
