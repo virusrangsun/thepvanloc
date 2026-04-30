@@ -6,9 +6,9 @@ category: Cắt thép
 topic: cat-chuan
 featured: true
 cover: /assets/beam-rebar.jpg
-excerpt: Những lưu ý khi đặt cắt thép theo kích thước cho nhà dân, nhà xưởng và công trình cần giao hàng theo từng đợt.
+excerpt: Những lưu ý khi đặt cắt thép theo kích thước cho nhà dân, nhà xưởng và
+  công trình cần giao hàng theo từng đợt.
 ---
-
 Cắt thép theo kích thước phù hợp khi công trình đã có danh sách quy cách rõ ràng và cần giảm hao hụt vật tư trên công trường.
 
 ## Khi nào nên đặt cắt theo kích thước
