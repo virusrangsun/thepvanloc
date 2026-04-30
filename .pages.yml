@@ -1,0 +1,58 @@
+media:
+  input: public/uploads
+  output: /uploads
+
+content:
+  - name: posts
+    label: Bài viết
+    type: collection
+    path: src/content/posts
+    format: yaml-frontmatter
+    filename: "{fields.slug}.md"
+    view:
+      primary: title
+      sort: date
+      order: desc
+    fields:
+      - name: title
+        label: Tiêu đề
+        type: string
+        required: true
+      - name: slug
+        label: Slug
+        type: string
+        required: true
+      - name: date
+        label: Ngày đăng
+        type: date
+        required: true
+      - name: category
+        label: Chuyên mục
+        type: string
+        required: true
+      - name: topic
+        label: Nhóm nội dung
+        type: select
+        options:
+          values:
+            - label: Cắt chuẩn
+              value: cat-chuan
+            - label: 3 thương hiệu
+              value: thuong-hieu
+            - label: Phản hồi nhanh
+              value: phan-hoi
+      - name: featured
+        label: Bài nổi bật
+        type: boolean
+        default: false
+      - name: cover
+        label: Ảnh đại diện
+        type: image
+      - name: excerpt
+        label: Mô tả ngắn
+        type: text
+      - name: body
+        label: Nội dung
+        type: rich-text
+        options:
+          format: markdown
